@@ -14,7 +14,6 @@ public:
 	{
 		bool data[(unsigned)InputKey::kCount];
 	};
-public:
 
 	void capture();
 

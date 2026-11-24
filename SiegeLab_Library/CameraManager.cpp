@@ -3,7 +3,7 @@
 
 Camera3D CameraManager::getCamera()
 {
-	return Camera3D{};
+	return currentCamera->getCamera();
 }
 
 void CameraManager::setActive()
