@@ -24,6 +24,7 @@ void Game::Run()
 
 		// draw some text using the default font
 		DrawText("Hello Raylib", 200, 200, 20, WHITE);
+		DrawCircle(400, 300, 50, RED);
 
 		// end the frame and get ready for the next one  (display frame, poll input, etc...)
 		EndDrawing();
