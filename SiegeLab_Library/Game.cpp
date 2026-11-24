@@ -24,6 +24,7 @@ void Game::Run()
 
 		// draw some text using the default font
 		DrawText("Hello Raylib", 200, 200, 20, WHITE);
+		DrawTriangle(Vector2{ 400, 300 }, Vector2{ 350, 100 }, Vector2{ 300, 300 }, YELLOW);
 
 		// end the frame and get ready for the next one  (display frame, poll input, etc...)
 		EndDrawing();
