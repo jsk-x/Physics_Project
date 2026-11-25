@@ -1,4 +1,6 @@
 #pragma once
+#include <array>
+#include <utility>
 
 namespace game {
 
@@ -20,16 +22,73 @@ namespace game {
 
     template <typename T, int Capacity>
     class ObjectPool {
-        create();
-        getId();
-        destroy();
-        clear();
-    };
+    public:
+        EntityId create(T value) {
+            for (int i = 0; i < Capacity; ++i) {
+                if (!slots_[i].alive) {
+                    slots_[i].value = std::move(value);
+                    slots_[i].alive = true;
+                    return EntityId{ i, slots_[i].generation };
+                }
+            }
+            return kInvalidEntityId;
+        }
 
-    struct SceneObjects {
-        void createEntity();
-        void getId();
-        void flushRemovals();
+        T* get(EntityId id) {
+            if (!isAlive(id)) {
+                return nullptr;
+            }
+            return &slots_[id.slot].value;
+        }
+
+        bool destroy(EntityId id) {
+            if (!isAlive(id)) {
+                return false;
+            }
+
+            reset(slots_[id.slot]);
+            return true;
+        }
+
+        using Callback = void (*)(T&);
+
+        void forEach(Callback func) {
+            for (Slot& slot : slots_) {
+                if (slot.alive) {
+                    func(slot.value);
+                }
+            }
+        }
+
+        void clear() {
+            for (Slot& slot : slots_) {
+                if (slot.alive) {
+                    reset(slot);
+                }
+            }
+        }
+
+    private:
+        struct Slot {
+            T value{};
+            unsigned int generation = 0;
+            bool alive = false;
+        };
+
+        bool isAlive(EntityId id) const {
+            if (id.slot < 0 || id.slot >= Capacity) {
+                return false;
+            }
+            return slots_[id.slot].alive &&
+                slots_[id.slot].generation == id.generation;
+        }
+
+        void reset(Slot& slot) {
+            slot.value = T();
+            slot.alive = false;
+            ++slot.generation;
+        }
+        std::array<Slot, Capacity> slots_;
     };
 
 }
