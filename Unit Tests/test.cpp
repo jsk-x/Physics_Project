@@ -27,7 +27,7 @@ TEST(ObjectPoolTest, Test_1) {
 	game::EntityId id = pool.create(Object{ 42 });
 
 	EXPECT_EQ(pool.get(id)->value, 42);
-}
+
 
   EXPECT_EQ(1, 1);
   EXPECT_TRUE(true);

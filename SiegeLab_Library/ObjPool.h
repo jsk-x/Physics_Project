@@ -1,6 +1,7 @@
 #pragma once
 #include <array>
 #include <utility>
+#include <functional>
 
 namespace game {
 
@@ -11,22 +12,14 @@ namespace game {
 
     inline constexpr EntityId kInvalidEntityId{};
 
-    class GameEntity {
-    public:
-        virtual ~GameEntity() = default;
-
-        virtual void draw() = 0;
-
-        virtual void unregisterColliders() {}
-    };
-
     template <typename T, int Capacity>
     class ObjectPool {
     public:
-        EntityId create(T value) {
+        template <typename U>
+        EntityId create() {
             for (int i = 0; i < Capacity; ++i) {
                 if (!slots_[i].alive) {
-                    slots_[i].value = std::move(value);
+                    slots_[i].value = new U();
                     slots_[i].alive = true;
                     return EntityId{ i, slots_[i].generation };
                 }
@@ -38,7 +31,7 @@ namespace game {
             if (!isAlive(id)) {
                 return nullptr;
             }
-            return &slots_[id.slot].value;
+            return slots_[id.slot].value;
         }
 
         bool destroy(EntityId id) {
@@ -50,7 +43,7 @@ namespace game {
             return true;
         }
 
-        using Callback = void (*)(T&);
+        using Callback = std::function<void(T*)>;
 
         void forEach(Callback func) {
             for (Slot& slot : slots_) {
@@ -70,7 +63,7 @@ namespace game {
 
     private:
         struct Slot {
-            T value{};
+            T* value;
             unsigned int generation = 0;
             bool alive = false;
         };
@@ -84,7 +77,7 @@ namespace game {
         }
 
         void reset(Slot& slot) {
-            slot.value = T();
+            slot.value = nullptr;
             slot.alive = false;
             ++slot.generation;
         }

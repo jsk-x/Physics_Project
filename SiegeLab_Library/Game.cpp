@@ -3,6 +3,10 @@
 
 #include "Game.h"
 #include "CameraManager.h"
+#include "ObjPool.h"
+#include "GameEntity.h"
+#include "StandardProjectile.h"
+#include "HeavyProjectile.h"
 
 #include "raylib.h"
 
@@ -14,6 +18,9 @@ void Game::Run()
 	const int height = 800;
 	const int width = 600;
 
+	game::ObjectPool<GameEntity, 2> pool;
+	pool.create<StandardProjectile>();
+	pool.create<HeavyProjectile>();
 	// Create the window and OpenGL context
 	InitWindow(height, width, "Hello Raylib");
 	CameraManager cams;
@@ -43,7 +50,11 @@ void Game::Run()
 		// draw some text using the default font
 		DrawText("Hello Raylib", 200, 200, 20, BLACK);
 		DrawCube(cube, 2.0f, 2.0f, 2.0f, BLUE);
+		pool.forEach([](GameEntity* obj) {obj->draw();});
+
 		DrawCubeWires(cube, 2.0f, 2.0f, 2.0f, SKYBLUE);
+
+		//draw on GameEntity
 
 		DrawGrid(10, 1.0f);
 
