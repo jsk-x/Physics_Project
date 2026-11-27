@@ -12,6 +12,14 @@ InputController::InputsSnapshot InputController::capture()
     if (IsKeyDown(KEY_UP) || IsKeyDown(KEY_W)) m_snapshot.data[(unsigned)InputKey::kUp] = true;
     if (IsKeyDown(KEY_DOWN) || IsKeyDown(KEY_S)) m_snapshot.data[(unsigned)InputKey::kDown] = true;
 
+    if (IsKeyDown(KEY_Q)) m_snapshot.data[(unsigned)InputKey::kSpeedDown] = true;
+    if (IsKeyDown(KEY_E)) m_snapshot.data[(unsigned)InputKey::kSpeedUp] = true;
+
+    if (IsKeyPressed(KEY_ONE)) m_snapshot.data[(unsigned)InputKey::kSelectStandard] = true;
+    if (IsKeyPressed(KEY_TWO)) m_snapshot.data[(unsigned)InputKey::kSelectHeavy] = true;
+
+    if (IsKeyPressed(KEY_R)) m_snapshot.data[(unsigned)InputKey::kReset] = true;
+
     if (IsMouseButtonDown(1)) m_snapshot.isMouseButtonDown = true;
 
     return m_snapshot;
