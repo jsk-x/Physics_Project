@@ -28,3 +28,4 @@ public:
 private:
 	InputsSnapshot m_snapshot;
 };
+
