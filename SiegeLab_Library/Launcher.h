@@ -1,6 +1,9 @@
 #pragma once
 #include <optional>
+#include "Projectile.h"
+#include "InputController.h"
 #include "ShotSettings.h"
+
 
 namespace game {
 
@@ -8,8 +11,6 @@ namespace game {
         float yaw = 0.f;
         float pitch = 0.f;
         float speed = 0.f;
-        std::optional<ProjectileKind> selectedKind;
-        float dt = 0.f;
     };
 
     class Launcher {
@@ -20,14 +21,16 @@ namespace game {
 
         explicit Launcher(Vector3 origin);
 
-        void aim(const LauncherInput& input);
+        void aim(InputController::InputsSnapshot& input, float dt);
         ShotSettings shotSettings() const;
 
     private:
         Vector3 origin_;
-        float yaw_ = 0.f;
-        float pitch_ = kPitchMin;
-        float speed_ = kSpeedMin;
-        ProjectileKind kind_ = ProjectileKind::Standard;
+        float _yaw = 0.f;
+        float _pitch = kPitchMin;
+        float _speed = kSpeedMin;
+        LauncherInput launch;
+        Projectile _proj;
+        ProjectileKind _kind = ProjectileKind::Standard;
     };
 }

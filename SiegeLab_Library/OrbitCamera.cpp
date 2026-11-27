@@ -9,7 +9,7 @@ void OrbitCamera::update(InputController::InputsSnapshot& input, cyclone::real& 
 	if (input.data[(unsigned)InputController::InputKey::kUp]) m_position.y -= 0.5;
 	if (input.data[(unsigned)InputController::InputKey::kDown]) m_position.y += 0.5;*/
 
-	if (input.data[(unsigned)InputController::InputKey::kReset]) reset();
+	if (input.keys[(unsigned)InputController::InputKey::kReset]) reset();
 
 	if (input.isMouseButtonDown)
 	{

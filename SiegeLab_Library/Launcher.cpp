@@ -13,26 +13,30 @@ namespace game {
     {
     }
 
-    void Launcher::aim(const LauncherInput& input)
+    void Launcher::aim(InputController::InputsSnapshot& input, float dt)
     {
-        yaw_ = Clamp(yaw_ + input.yaw * kYawRate * input.dt, kYawMin, kYawMax);
-        pitch_ = Clamp(pitch_ + input.pitch * kPitchRate * input.dt, kPitchMin, kPitchMax);
-        speed_ = Clamp(speed_ + input.speed * kSpeedRate * input.dt, kSpeedMin, kSpeedMax);
+        if (input.keys[0])
+            launch.yaw = Clamp(launch.yaw + kYawRate * dt, kYawMin, kYawMax);
+        if (input.keys[1])
+            launch.yaw = Clamp(launch.yaw - kYawRate * dt, kYawMin, kYawMax);
+        _pitch = Clamp(_pitch + 1 * kPitchRate * dt, kPitchMin, kPitchMax);
+        _speed = Clamp(_speed + 1 * kSpeedRate * dt, kSpeedMin, kSpeedMax);
 
-        if (input.selectedKind) {
-            kind_ = *input.selectedKind;
-        }
+        if (input.keys[6]) _kind = ProjectileKind::Standard;
+        if (input.keys[7]) _kind = ProjectileKind::Heavy;
+
+        if (input.keys[9]) _proj.fire(shotSettings());
     }
 
     ShotSettings Launcher::shotSettings() const
     {
         const Matrix rotation = MatrixMultiply(
-            MatrixRotateZ(pitch_ * DEG2RAD),
-            MatrixRotateY(-yaw_ * DEG2RAD));
+            MatrixRotateZ(_pitch * DEG2RAD),
+            MatrixRotateY(-_yaw * DEG2RAD));
 
         const Vector3 direction = Vector3Normalize(
             Vector3Transform(Vector3{ 1.f, 0.f, 0.f }, rotation));
 
-        return ShotSettings{ origin_, direction, speed_, kind_ };
+        return ShotSettings{ origin_, direction, _speed, _kind };
     }
 }

@@ -38,7 +38,7 @@ TEST(GP_T3, C01) {
 
 	InputController::InputsSnapshot snapshot;
 	for (int i = 0; i < (unsigned)InputController::InputKey::kCount; ++i)
-		snapshot.data[i] = false;
+		snapshot.keys[i] = false;
 
 	OrbitCamera cams;
 
@@ -72,8 +72,8 @@ namespace {
         in.yaw = yaw;
         in.pitch = pitch;
         in.speed = speed;
-        in.dt = seconds;
-        launcher.aim(in);
+        float dt = seconds;
+        launcher.aim(&in, dt);
     }
 
     game::Launcher makeLauncher() {

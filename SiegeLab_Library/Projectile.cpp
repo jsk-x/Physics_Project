@@ -5,7 +5,7 @@ Projectile::Projectile()
 {
 }
 
-void Projectile::fire(cyclone::Contact settings)
+void Projectile::fire(game::ShotSettings settings)
 {
 	
 }

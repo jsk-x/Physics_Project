@@ -4,6 +4,7 @@
 #include "Game.h"
 #include "CameraManager.h"
 #include "ObjPool.h"
+#include "Launcher.h"
 #include "GameEntity.h"
 #include "StandardProjectile.h"
 #include "HeavyProjectile.h"
